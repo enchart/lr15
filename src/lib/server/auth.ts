@@ -1,5 +1,5 @@
-import { VK_CLIENT_ID, VK_CLIENT_SECRET } from "$env/static/private";
-import { PUBLIC_BETTER_AUTH_URL } from "$env/static/public";
+import { VK_CLIENT_SECRET } from "$env/static/private";
+import { PUBLIC_BETTER_AUTH_URL, PUBLIC_VK_APP_ID } from "$env/static/public";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
@@ -28,7 +28,7 @@ export const auth = betterAuth({
 
   socialProviders: {
     vk: {
-      clientId: VK_CLIENT_ID,
+      clientId: PUBLIC_VK_APP_ID,
       clientSecret: VK_CLIENT_SECRET,
       lang_id: 0,
       mapProfileToUser: (profile) => ({

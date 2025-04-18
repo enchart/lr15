@@ -9,7 +9,6 @@
   } from "@lucide/svelte";
   import * as Card from "@/components/ui/card";
   import LogInButton from "./log-in-button.svelte";
-  import OneTapButton from "./one-tap-button.svelte";
 
   const features = [
     {
@@ -59,8 +58,7 @@
       .
     </p>
     <div class="flex justify-center">
-      <!-- <LogInButton /> -->
-      <OneTapButton />
+      <LogInButton />
     </div>
   </div>
 </section>
