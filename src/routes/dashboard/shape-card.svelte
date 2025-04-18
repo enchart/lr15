@@ -16,6 +16,7 @@
   import { formatPrice } from "@/utils/price";
   import type { GetShapes } from "../api/shapes/+server";
   import type { GetUserShapes } from "../api/shapes/user/+server";
+  import { getShapeIcon } from "./shape-icons";
 
   interface ShapeCardProps {
     shape: GetShapes[number];
@@ -28,6 +29,7 @@
   let loading = $state(false);
   let price = $derived(shape.prices.length ? shape.prices[0].price : 0);
   let amount = $derived(userShapes.find((s) => s.shapeId === shape.id)?.amount || 0);
+  let Icon = $derived(getShapeIcon(shape.id));
 
   let canvas = $state<HTMLCanvasElement>();
   onMount(() => {
@@ -111,7 +113,10 @@
 
 <Card.Root>
   <Card.Header>
-    <Card.Title>{shape.name}</Card.Title>
+    <Card.Title class="mb-1 flex items-center gap-2">
+      <Icon class="size-5" />
+      <span>{shape.name}</span>
+    </Card.Title>
     <Card.Description>@{shape.id.toUpperCase()}</Card.Description>
   </Card.Header>
   <Card.Content>
