@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { LogOut } from "@lucide/svelte";
   import { invalidateAll } from "$app/navigation";
   import { authClient, type Session } from "@/auth-client";
   import * as Avatar from "@/components/ui/avatar";
@@ -45,7 +46,10 @@
           <DropdownMenu.Group>
             <DropdownMenu.GroupHeading>{user.name}</DropdownMenu.GroupHeading>
             <DropdownMenu.Separator />
-            <DropdownMenu.Item onclick={handleLogOut}>Выйти</DropdownMenu.Item>
+            <DropdownMenu.Item onclick={handleLogOut}>
+              <LogOut />
+              <span>Выйти</span>
+            </DropdownMenu.Item>
           </DropdownMenu.Group>
         </DropdownMenu.Content>
       </DropdownMenu.Root>

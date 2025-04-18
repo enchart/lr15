@@ -23,6 +23,12 @@ export const auth = betterAuth({
         type: "string",
         input: false,
       },
+      balance: {
+        type: "number",
+        required: true,
+        input: false,
+        defaultValue: 1000_00,
+      },
     },
   },
 

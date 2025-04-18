@@ -10,6 +10,7 @@ export const users = sqliteTable("users", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
   firstName: text("first_name"),
   lastName: text("last_name"),
+  balance: integer("balance").notNull(),
 });
 
 export const sessions = sqliteTable("sessions", {
