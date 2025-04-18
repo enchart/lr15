@@ -17,12 +17,10 @@ export const auth = betterAuth({
     additionalFields: {
       firstName: {
         type: "string",
-        required: true,
         input: false,
       },
       lastName: {
         type: "string",
-        required: true,
         input: false,
       },
     },
@@ -32,6 +30,7 @@ export const auth = betterAuth({
     vk: {
       clientId: VK_CLIENT_ID,
       clientSecret: VK_CLIENT_SECRET,
+      lang_id: 0,
       mapProfileToUser: (profile) => ({
         id: profile.user.user_id,
         name: `${profile.user.first_name} ${profile.user.last_name}`,

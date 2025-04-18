@@ -28,7 +28,11 @@
       <DropdownMenu.Trigger>
         <Avatar.Root>
           <Avatar.Image src={user.image} alt={user.name} />
-          <Avatar.Fallback>{user.firstName[0]}{user.lastName[0]}</Avatar.Fallback>
+          {#if user.firstName && user.lastName}
+            <Avatar.Fallback>{user.firstName[0]}{user.lastName[0]}</Avatar.Fallback>
+          {:else}
+            <Avatar.Fallback>{user.name[0]}</Avatar.Fallback>
+          {/if}
         </Avatar.Root>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>

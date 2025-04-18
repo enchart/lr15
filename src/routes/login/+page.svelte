@@ -4,7 +4,7 @@
 
   async function logInWithVk() {
     const { error } = await authClient.signIn.social({
-      provider: "vk",
+      provider: "vk"
     });
     if (error) {
       console.error(error);
