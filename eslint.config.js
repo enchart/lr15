@@ -31,5 +31,16 @@ export default ts.config(
         parser: ts.parser,
       },
     },
+  },
+  {
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^$$(Props|Events|Slots|Generic)$",
+        },
+      ],
+    },
   }
 );
