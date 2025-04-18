@@ -14,7 +14,8 @@
     "lint": "prettier --check . && eslint .",
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "auth:generate": "pnpm dlx @better-auth/cli generate --config ./src/lib/server/auth.ts --output ./src/lib/server/db/schema/auth.ts --y && prettier --write ./src/lib/server/db/schema/auth.ts"
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.5",
@@ -45,6 +46,7 @@
     "vite": "^6.0.0"
   },
   "dependencies": {
+    "better-auth": "^1.2.7",
     "better-sqlite3": "^11.8.0",
     "drizzle-orm": "^0.38.4",
     "mode-watcher": "0.5.1"
