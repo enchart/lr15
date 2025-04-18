@@ -5,10 +5,10 @@
 </script>
 
 <main>
-  <section class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+  <section class="grid gap-4 lg:grid-cols-3">
     {#each data.shapes as shape (shape.id)}
       <article>
-        <ShapeCard {shape} />
+        <ShapeCard user={data.user} userShapes={data.userShapes} {shape} />
       </article>
     {/each}
   </section>

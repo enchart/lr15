@@ -3,7 +3,7 @@ import { auth } from "@/server/auth";
 import { db } from "@/server/db";
 
 export async function GET({ request }) {
-  const session = await auth.api.getSession(request);
+  const session = await auth.api.getSession({ headers: request.headers });
   if (!session) {
     throw error(401);
   }
@@ -18,6 +18,8 @@ async function getShapes() {
           createdAt: true,
           price: true,
         },
+        limit: 25,
+        orderBy: (prices, { desc }) => [desc(prices.createdAt)],
       },
     },
   });

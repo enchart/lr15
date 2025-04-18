@@ -16,11 +16,11 @@ export async function init() {
     });
 
     let price = 10000;
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 20; i++) {
       price += random(-100, 100);
       await db.insert(shapePrices).values({
         shapeId: id,
-        createdAt: new Date(Date.now() - (9 - i) * 10000),
+        createdAt: new Date(Date.now() - (19 - i) * 10000),
         price,
       });
     }
