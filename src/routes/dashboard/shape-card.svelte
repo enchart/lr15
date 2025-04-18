@@ -25,6 +25,7 @@
 
   let { shape, user, userShapes }: ShapeCardProps = $props();
 
+  let loading = $state(false);
   let price = $derived(shape.prices.length ? shape.prices[0].price : 0);
   let amount = $derived(userShapes.find((s) => s.shapeId === shape.id)?.amount || 0);
 
@@ -72,6 +73,7 @@
   });
 
   async function onBuy() {
+    loading = true;
     const response = await fetch("/api/shapes/buy", {
       method: "POST",
       headers: {
@@ -79,13 +81,17 @@
       },
       body: JSON.stringify({ shapeId: shape.id }),
     });
+
     if (!response.ok) {
       console.error(response);
+    } else {
+      await invalidateAll();
     }
-    await invalidateAll();
+    loading = false;
   }
 
   async function onSell() {
+    loading = true;
     const response = await fetch("/api/shapes/sell", {
       method: "POST",
       headers: {
@@ -93,10 +99,13 @@
       },
       body: JSON.stringify({ shapeId: shape.id }),
     });
+
     if (!response.ok) {
       console.error(response);
+    } else {
+      await invalidateAll();
     }
-    await invalidateAll();
+    loading = false;
   }
 </script>
 
@@ -123,8 +132,11 @@
         title="Продать"
         onclick={onSell}
         disabled={amount === 0}
+        {loading}
       >
-        <ArrowDown class="!size-5" />
+        {#if !loading}
+          <ArrowDown class="!size-5" />
+        {/if}
         <span class="sr-only">Продать</span>
       </Button>
       <Button
@@ -134,8 +146,11 @@
         title="Купить"
         onclick={onBuy}
         disabled={user.balance < price}
+        {loading}
       >
-        <ArrowUp class="!size-5" />
+        {#if !loading}
+          <ArrowUp class="!size-5" />
+        {/if}
         <span class="sr-only">Купить</span>
       </Button>
     </div>
