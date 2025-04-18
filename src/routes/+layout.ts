@@ -5,7 +5,6 @@ export async function load({ fetch }) {
   const { data, error: err } = await authClient.getSession({
     fetchOptions: {
       customFetchImpl: fetch,
-      credentials: "include",
     },
   });
   if (err) {

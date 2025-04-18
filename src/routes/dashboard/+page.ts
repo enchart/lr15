@@ -1,8 +1,12 @@
-import { redirect } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
+import type { GetShapes } from "../api/shapes/+server";
 
-export async function load({ parent }) {
-  const { user } = await parent();
-  if (!user) {
-    throw redirect(302, "/");
+export async function load({ fetch }) {
+  const response = await fetch("/api/shapes");
+  if (!response.ok) {
+    throw error(response.status);
   }
+
+  const shapes: GetShapes = await response.json();
+  return { shapes };
 }
