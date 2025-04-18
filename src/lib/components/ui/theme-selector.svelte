@@ -23,12 +23,12 @@
   </DropdownMenu.Trigger>
   <DropdownMenu.Content align="end">
     <DropdownMenu.Item onclick={() => setMode("light")}>
-      <Moon />
-      <span>Тёмная тема</span>
-    </DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => setMode("dark")}>
       <Sun />
       <span>Светлая тема</span>
+    </DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => setMode("dark")}>
+      <Moon />
+      <span>Тёмная тема</span>
     </DropdownMenu.Item>
     <DropdownMenu.Item onclick={() => resetMode()}>
       <Contrast />

@@ -11,6 +11,14 @@
   }
 
   let { user }: HeaderProps = $props();
+  let balance = $derived(
+    user
+      ? (user.balance / 100).toLocaleString("ru-RU", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
+      : null
+  );
 
   async function handleLogOut() {
     const { error } = await authClient.signOut();
@@ -26,33 +34,38 @@
   <h1 class="h2 border-0">
     <a href="/">Фигурка</a>
   </h1>
-  <div class="flex flex-wrap items-center gap-4">
-    <ThemeSelector variant="ghost" />
+  <div class="flex flex-grow flex-wrap items-center justify-between gap-4 sm:flex-grow-0">
     {#if user}
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          <Avatar.Root>
-            <Avatar.Image src={user.image} alt={user.name} />
-            {#if user.firstName && user.lastName}
-              <Avatar.Fallback>
-                {user.firstName[0].toUpperCase()}{user.lastName[0].toUpperCase()}
-              </Avatar.Fallback>
-            {:else}
-              <Avatar.Fallback>{user.name[0].toUpperCase()}</Avatar.Fallback>
-            {/if}
-          </Avatar.Root>
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content align="end" side="bottom" alignOffset={8} sideOffset={8}>
-          <DropdownMenu.Group>
-            <DropdownMenu.GroupHeading>{user.name}</DropdownMenu.GroupHeading>
-            <DropdownMenu.Separator />
-            <DropdownMenu.Item onclick={handleLogOut}>
-              <LogOut />
-              <span>Выйти</span>
-            </DropdownMenu.Item>
-          </DropdownMenu.Group>
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
+      <span class="text-lg font-medium">{balance} ₽</span>
     {/if}
+    <div class="flex flex-wrap items-center gap-4">
+      <ThemeSelector variant="ghost" />
+      {#if user}
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Avatar.Root>
+              <Avatar.Image src={user.image} alt={user.name} />
+              {#if user.firstName && user.lastName}
+                <Avatar.Fallback>
+                  {user.firstName[0].toUpperCase()}{user.lastName[0].toUpperCase()}
+                </Avatar.Fallback>
+              {:else}
+                <Avatar.Fallback>{user.name[0].toUpperCase()}</Avatar.Fallback>
+              {/if}
+            </Avatar.Root>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content align="end" side="bottom" alignOffset={8} sideOffset={8}>
+            <DropdownMenu.Group>
+              <DropdownMenu.GroupHeading>{user.name}</DropdownMenu.GroupHeading>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item onclick={handleLogOut}>
+                <LogOut />
+                <span>Выйти</span>
+              </DropdownMenu.Item>
+            </DropdownMenu.Group>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      {/if}
+    </div>
   </div>
 </header>
