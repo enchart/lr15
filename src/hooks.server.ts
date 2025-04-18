@@ -1,10 +1,11 @@
 import type { Handle } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 import { svelteKitHandler } from "better-auth/svelte-kit";
+import { eq } from "drizzle-orm";
 import { auth } from "@/server/auth";
 import { db } from "@/server/db";
 import { shapeNews, shapePrices, shapes } from "@/server/db/schema";
-import { random } from "@/utils/math";
+import { random, weightedRandom } from "@/utils/math";
 
 const defaultShapes = [
   {
@@ -27,12 +28,26 @@ const defaultShapes = [
   },
 ];
 
+const shapeNewsTypes = {
+  small: 5,
+  large: 1,
+};
+
 async function createRandomNews() {
-  const shape = defaultShapes[Math.floor(Math.random() * defaultShapes.length)];
+  const defaultShape = defaultShapes[Math.floor(Math.random() * defaultShapes.length)];
+  const shape = await db.query.shapes.findFirst({
+    where: eq(shapes.id, defaultShape.id),
+  });
+  if (!shape) {
+    console.error("default shape was not present in db");
+    return;
+  }
+
+  const type = weightedRandom(shapeNewsTypes);
 
   // await db.insert(shapeNews).values({
   //   shapeId: shape.id,
-  //   title: 
+  //   title:
   //   text: "TODO",
   // })
 }
