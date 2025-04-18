@@ -4,9 +4,7 @@ import { authClient } from "@/auth-client";
 export async function load({ fetch }) {
   const { data, error: err } = await authClient.getSession({
     fetchOptions: {
-      customFetchImpl: async (input, init) => {
-        return await fetch(input, init);
-      },
+      customFetchImpl: fetch,
       credentials: "include",
     },
   });

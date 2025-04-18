@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
+  import { invalidateAll } from "$app/navigation";
   import { authClient, type Session } from "@/auth-client";
   import * as Avatar from "@/components/ui/avatar";
-  import { Button } from "@/components/ui/button";
   import * as DropdownMenu from "@/components/ui/dropdown-menu";
+  import ThemeSelector from "@/components/ui/theme-selector.svelte";
 
   interface HeaderProps {
     user?: Session["user"];
@@ -17,29 +17,38 @@
       console.error(error);
       return;
     }
-    await goto("/login", { invalidateAll: true });
+    await invalidateAll();
   }
 </script>
 
-<header class="container flex items-center justify-between p-4">
-  <h1 class="text-2xl font-bold">Фигурка</h1>
-  {#if user}
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <Avatar.Root>
-          <Avatar.Image src={user.image} alt={user.name} />
-          {#if user.firstName && user.lastName}
-            <Avatar.Fallback>{user.firstName[0]}{user.lastName[0]}</Avatar.Fallback>
-          {:else}
-            <Avatar.Fallback>{user.name[0]}</Avatar.Fallback>
-          {/if}
-        </Avatar.Root>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        <DropdownMenu.Item onclick={handleLogOut}>Выйти</DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
-  {:else}
-    <Button href="/login">Войти</Button>
-  {/if}
+<header class="flex flex-wrap items-center justify-between gap-4">
+  <h1 class="h2 border-0">
+    <a href="/">Фигурка</a>
+  </h1>
+  <div class="flex flex-wrap items-center gap-4">
+    <ThemeSelector variant="ghost" />
+    {#if user}
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <Avatar.Root>
+            <Avatar.Image src={user.image} alt={user.name} />
+            {#if user.firstName && user.lastName}
+              <Avatar.Fallback>
+                {user.firstName[0].toUpperCase()}{user.lastName[0].toUpperCase()}
+              </Avatar.Fallback>
+            {:else}
+              <Avatar.Fallback>{user.name[0].toUpperCase()}</Avatar.Fallback>
+            {/if}
+          </Avatar.Root>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content align="end" side="bottom" alignOffset={8} sideOffset={8}>
+          <DropdownMenu.Group>
+            <DropdownMenu.GroupHeading>{user.name}</DropdownMenu.GroupHeading>
+            <DropdownMenu.Separator />
+            <DropdownMenu.Item onclick={handleLogOut}>Выйти</DropdownMenu.Item>
+          </DropdownMenu.Group>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    {/if}
+  </div>
 </header>
