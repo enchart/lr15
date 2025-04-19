@@ -4,8 +4,10 @@ import { svelteKitHandler } from "better-auth/svelte-kit";
 import { eq } from "drizzle-orm";
 import { auth } from "@/server/auth";
 import { db } from "@/server/db";
-import { shapeNews, shapePrices, shapes } from "@/server/db/schema";
-import { random, weightedRandom } from "@/utils/math";
+import { shapeNews, shapePrices, shapes, users } from "@/server/db/schema";
+import { setNewsData } from "@/server/news-data";
+import { random, randomFromList } from "@/utils/math";
+import { formatPrice } from "@/utils/price";
 
 const defaultShapes = [
   {
@@ -28,28 +30,54 @@ const defaultShapes = [
   },
 ];
 
-const shapeNewsTypes = {
-  small: 5,
-  large: 1,
-};
-
 async function createRandomNews() {
   const defaultShape = defaultShapes[Math.floor(Math.random() * defaultShapes.length)];
   const shape = await db.query.shapes.findFirst({
     where: eq(shapes.id, defaultShape.id),
+    with: {
+      prices: {
+        limit: 1,
+        orderBy: (prices, { desc }) => [desc(prices.createdAt)],
+      },
+    },
   });
   if (!shape) {
     console.error("default shape was not present in db");
     return;
   }
 
-  const type = weightedRandom(shapeNewsTypes);
+  const type = randomFromList("up", "up", "up", "down", "down", "down", "bigUp", "bigDown");
 
-  // await db.insert(shapeNews).values({
-  //   shapeId: shape.id,
-  //   title:
-  //   text: "TODO",
-  // })
+  let change: number;
+  switch (type) {
+    case "up":
+      change = Number(random(1_00, 3_00).toFixed(2));
+      break;
+    case "down":
+      change = -Number(random(1_00, 3_00).toFixed(2));
+      break;
+    case "bigUp":
+      change = Number(random(5_00, 10_00).toFixed(2));
+      break;
+    case "bigDown":
+      change = -Number(random(5_00, 10_00).toFixed(2));
+      break;
+  }
+  const price = shape.prices[0].price + change;
+
+  const news = {
+    shapeId: shape.id,
+    title: `${shape.name}: ${type === "up" ? "повышение" : "снижение"} цены на ${formatPrice(Math.abs(change))}`,
+    content: "TODO",
+    createdAt: new Date(),
+    change,
+  };
+  await db.insert(shapeNews).values(news);
+  await db.insert(shapePrices).values({ shapeId: shape.id, price });
+
+  console.log(news.title);
+  setNewsData({ shapeId: shape.id, news, price });
+  setTimeout(createRandomNews, random(5000, 15000));
 }
 
 export async function init() {
@@ -61,9 +89,9 @@ export async function init() {
       description: "TODO",
     });
 
-    price = price * 100;
+    price = Number((price * 100).toFixed(0));
     for (let i = 0; i < 20; i++) {
-      price += random(-100, 100);
+      price += Math.round(random(-2_00, 2_00));
       await db.insert(shapePrices).values({
         shapeId: id,
         createdAt: new Date(Date.now() - (19 - i) * 10000),
@@ -73,9 +101,12 @@ export async function init() {
   }
 
   await db.delete(shapes);
+  await db.update(users).set({ balance: 1000_00 });
   for (const defaultShape of defaultShapes) {
     await insertShape(defaultShape.id, defaultShape.name, defaultShape.color, defaultShape.price);
   }
+
+  createRandomNews();
 }
 
 const handleAuth: Handle = async ({ event, resolve }) => {

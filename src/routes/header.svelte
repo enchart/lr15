@@ -5,20 +5,19 @@
   import * as Avatar from "@/components/ui/avatar";
   import * as DropdownMenu from "@/components/ui/dropdown-menu";
   import ThemeSelector from "@/components/ui/theme-selector.svelte";
+  import { getBalance, setBalance } from "@/states/balance.svelte";
+  import { formatPrice } from "@/utils/price";
 
   interface HeaderProps {
     user?: Session["user"];
   }
 
   let { user }: HeaderProps = $props();
-  let balance = $derived(
-    user
-      ? (user.balance / 100).toLocaleString("ru-RU", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })
-      : null
-  );
+  $effect(() => {
+    if (user) {
+      setBalance(user.balance);
+    }
+  });
 
   async function handleLogOut() {
     const { error } = await authClient.signOut();
@@ -36,7 +35,7 @@
   </h1>
   <div class="flex flex-grow flex-wrap items-center justify-between gap-4 sm:flex-grow-0">
     {#if user}
-      <span class="text-lg font-medium">{balance} ₽</span>
+      <span class="text-lg font-medium">{formatPrice(getBalance())} ₽</span>
     {/if}
     <div class="flex flex-wrap items-center gap-4">
       <ThemeSelector variant="ghost" />

@@ -13,6 +13,8 @@
   import type { Session } from "@/auth-client";
   import { Button } from "@/components/ui/button";
   import * as Card from "@/components/ui/card";
+  import type { NewsData } from "@/server/news-data";
+  import { addBalance, getBalance, removeBalance } from "@/states/balance.svelte";
   import { formatPrice } from "@/utils/price";
   import type { GetShapes } from "../api/shapes/+server";
   import type { GetUserShapes } from "../api/shapes/user/+server";
@@ -22,9 +24,10 @@
     shape: GetShapes[number];
     user: Session["user"];
     userShapes: GetUserShapes;
+    newsData: NewsData | null;
   }
 
-  let { shape, user, userShapes }: ShapeCardProps = $props();
+  let { shape, user, userShapes, newsData }: ShapeCardProps = $props();
 
   let loading = $state(false);
   let price = $derived(shape.prices.length ? shape.prices[0].price : 0);
@@ -32,11 +35,29 @@
   let Icon = $derived(getShapeIcon(shape.id));
 
   let canvas = $state<HTMLCanvasElement>();
+  let chart: Chart | null = $state(null);
+  $effect(() => {
+    if (newsData) {
+      if (newsData.shapeId !== shape.id) {
+        return;
+      }
+      if (chart) {
+        chart.data.labels?.shift();
+        chart.data.labels?.push(new Date());
+
+        chart.data.datasets[0].data.shift();
+        chart.data.datasets[0].data.push(newsData.price);
+        chart.update();
+      }
+      price = newsData.price;
+    }
+  });
+
   onMount(() => {
     const ctx = canvas!.getContext("2d")!;
 
     Chart.register(CategoryScale, LinearScale, LineController, PointElement, LineElement);
-    new Chart(ctx, {
+    chart = new Chart(ctx, {
       type: "line",
       data: {
         labels: shape.prices.map((p) => new Date(p.createdAt)),
@@ -87,7 +108,8 @@
     if (!response.ok) {
       console.error(response);
     } else {
-      await invalidateAll();
+      amount += 1;
+      removeBalance(price);
     }
     loading = false;
   }
@@ -105,7 +127,8 @@
     if (!response.ok) {
       console.error(response);
     } else {
-      await invalidateAll();
+      amount -= 1;
+      addBalance(price);
     }
     loading = false;
   }
@@ -150,7 +173,7 @@
         size="icon"
         title="Купить"
         onclick={onBuy}
-        disabled={user.balance < price}
+        disabled={getBalance() < price}
         {loading}
       >
         {#if !loading}

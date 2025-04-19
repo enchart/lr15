@@ -90,6 +90,9 @@ importers:
       svelte-check:
         specifier: ^4.0.0
         version: 4.1.6(picomatch@4.0.2)(svelte@5.27.2)(typescript@5.8.3)
+      sveltekit-sse:
+        specifier: ^0.13.18
+        version: 0.13.18(@microsoft/fetch-event-source@2.0.1)(@sveltejs/kit@2.20.7(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.27.2)(vite@6.3.1(@types/node@22.14.1)(jiti@1.21.7)(yaml@2.7.1)))(svelte@5.27.2)(vite@6.3.1(@types/node@22.14.1)(jiti@1.21.7)(yaml@2.7.1)))(svelte@5.27.2)
       tailwind-merge:
         specifier: ^3.2.0
         version: 3.2.0
@@ -719,6 +722,9 @@ packages:
     resolution: {integrity: sha512-Npk6lI2EYXp70LKkqgiSCGAHhjnPjd+2/CeC5LkpGr6JdKj833/mPFSfhM66PVrlJJsfG5Hh4Mpytez83pK1Qg==}
     peerDependencies:
       svelte: ^5
+
+  '@microsoft/fetch-event-source@2.0.1':
+    resolution: {integrity: sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==}
 
   '@noble/ciphers@0.6.0':
     resolution: {integrity: sha512-mIbq/R9QXk5/cTfESb1OKtyFnk7oc1Om/8onA1158K9/OZUQFDEVy55jVTato+xmp3XX6F6Qh0zz0Nc1AxAlRQ==}
@@ -2179,6 +2185,13 @@ packages:
     resolution: {integrity: sha512-WQigWAJSONxMfIYFBnnKXf5s+TcXbktLsZ+HMLfjhjSHOW9C0OV9TmPPTxVdbxs5tuiS8iQecCxLTHpdgWwgiA==}
     engines: {node: '>=18'}
 
+  sveltekit-sse@0.13.18:
+    resolution: {integrity: sha512-DEK2pcnHZsQTezM6Eq4qBUewkp3v1SBpBXX4eNiFZs4cwfGw++lEVAoPoR4I1CmLjfz+RznblvvX/Q0qomj1VA==}
+    peerDependencies:
+      '@microsoft/fetch-event-source': ^2.0.1
+      '@sveltejs/kit': ^2.0.0
+      svelte: ^4.0.0 || ^5.0.0-next.0
+
   tabbable@6.2.0:
     resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
 
@@ -2788,6 +2801,8 @@ snapshots:
   '@lucide/svelte@0.500.0(svelte@5.27.2)':
     dependencies:
       svelte: 5.27.2
+
+  '@microsoft/fetch-event-source@2.0.1': {}
 
   '@noble/ciphers@0.6.0': {}
 
@@ -4186,6 +4201,12 @@ snapshots:
       locate-character: 3.0.0
       magic-string: 0.30.17
       zimmerframe: 1.1.2
+
+  sveltekit-sse@0.13.18(@microsoft/fetch-event-source@2.0.1)(@sveltejs/kit@2.20.7(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.27.2)(vite@6.3.1(@types/node@22.14.1)(jiti@1.21.7)(yaml@2.7.1)))(svelte@5.27.2)(vite@6.3.1(@types/node@22.14.1)(jiti@1.21.7)(yaml@2.7.1)))(svelte@5.27.2):
+    dependencies:
+      '@microsoft/fetch-event-source': 2.0.1
+      '@sveltejs/kit': 2.20.7(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.27.2)(vite@6.3.1(@types/node@22.14.1)(jiti@1.21.7)(yaml@2.7.1)))(svelte@5.27.2)(vite@6.3.1(@types/node@22.14.1)(jiti@1.21.7)(yaml@2.7.1))
+      svelte: 5.27.2
 
   tabbable@6.2.0: {}
 
