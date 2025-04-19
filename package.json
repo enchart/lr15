@@ -52,6 +52,7 @@
     "better-auth": "^1.2.7",
     "better-sqlite3": "^11.8.0",
     "chart.js": "^4.4.9",
+    "dotenv": "^16.5.0",
     "drizzle-orm": "^0.38.4",
     "mode-watcher": "0.5.1",
     "valibot": "^1.0.0"
