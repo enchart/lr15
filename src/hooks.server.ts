@@ -151,6 +151,16 @@ const handleHeaders: Handle = async ({ event, resolve }) => {
   return resolve(event, {
     filterSerializedResponseHeaders: (key, _) => key === "content-type",
   });
+  return resolve(event);
 };
 
 export const handle = sequence(handleAuth, handleHeaders);
+
+export const handleFetch = async ({ request, fetch }) => {
+  // if (request.url.startsWith(apiUrl)) {
+  //   // Workaround: https://github.com/sveltejs/kit/issues/6608
+  //   request.headers.set('origin', appUrl)
+  // }
+  console.log(request.url);
+  return fetch(request);
+};
