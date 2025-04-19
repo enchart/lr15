@@ -1,6 +1,5 @@
 <script lang="ts">
   import { ArrowDown, ArrowUp } from "@lucide/svelte";
-  import { invalidateAll } from "$app/navigation";
   import {
     CategoryScale,
     Chart,
@@ -13,7 +12,7 @@
   import type { Session } from "@/auth-client";
   import { Button } from "@/components/ui/button";
   import * as Card from "@/components/ui/card";
-  import type { NewsData } from "@/server/news-data";
+  import type { shapeNews } from "@/server/db/schema";
   import { addBalance, getBalance, removeBalance } from "@/states/balance.svelte";
   import { formatPrice } from "@/utils/price";
   import type { GetShapes } from "../api/shapes/+server";
@@ -24,7 +23,7 @@
     shape: GetShapes[number];
     user: Session["user"];
     userShapes: GetUserShapes;
-    newsData: NewsData | null;
+    newsData: typeof shapeNews.$inferInsert | null;
   }
 
   let { shape, user, userShapes, newsData }: ShapeCardProps = $props();

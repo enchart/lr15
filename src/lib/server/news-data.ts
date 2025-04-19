@@ -1,17 +1,11 @@
 import type { shapeNews } from "@/server/db/schema";
 
-export interface NewsData {
-  shapeId: string;
-  news: typeof shapeNews.$inferInsert;
-  price: number;
-}
+let newsData: typeof shapeNews.$inferInsert | null = null;
 
-let newsData: NewsData | null = null;
-
-export function setNewsData(data: NewsData) {
+export function setNewsData(data: typeof shapeNews.$inferInsert) {
   newsData = data;
 }
 
-export function getNewsData(): NewsData | null {
+export function getNewsData(): typeof shapeNews.$inferInsert | null {
   return newsData;
 }

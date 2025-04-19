@@ -63,20 +63,54 @@ async function createRandomNews() {
       change = -Number(random(5_00, 10_00).toFixed(2));
       break;
   }
+
+  let comment: string;
+  switch (type) {
+    case "up":
+      comment = "повышение";
+      break;
+    case "down":
+      comment = "снижение";
+      break;
+    case "bigUp":
+      comment = "рост";
+      break;
+    case "bigDown":
+      comment = "падение";
+      break;
+    default:
+      comment = "изменение";
+      break;
+  }
+
   const price = shape.prices[0].price + change;
 
   const news = {
     shapeId: shape.id,
-    title: `${shape.name}: ${type === "up" ? "повышение" : "снижение"} цены на ${formatPrice(Math.abs(change))}`,
+    title: `${shape.name}: ${comment} цены на ${formatPrice(Math.abs(change))}`,
     content: "TODO",
     createdAt: new Date(),
+    price,
     change,
   };
+
+  if (price <= 0) {
+    console.log("negative price");
+    createRandomNews();
+    return;
+  }
+
+  if (price >= 100_000_000_00) {
+    console.log("too big price");
+    createRandomNews();
+    return;
+  }
+
   await db.insert(shapeNews).values(news);
   await db.insert(shapePrices).values({ shapeId: shape.id, price });
 
   console.log(news.title);
-  setNewsData({ shapeId: shape.id, news, price });
+  setNewsData(news);
   setTimeout(createRandomNews, random(5000, 15000));
 }
 

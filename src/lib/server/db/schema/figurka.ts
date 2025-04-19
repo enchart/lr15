@@ -42,6 +42,7 @@ export const shapeNews = sqliteTable("shape_news", {
     .default(sql`(current_timestamp)`),
   title: text("title").notNull(),
   content: text("content").notNull(),
+  price: integer().notNull(),
   change: integer().notNull(),
 });
 

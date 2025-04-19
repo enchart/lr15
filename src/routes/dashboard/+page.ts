@@ -1,7 +1,7 @@
 import { error } from "@sveltejs/kit";
+import type { shapeNews } from "@/server/db/schema";
 import type { GetShapes } from "../api/shapes/+server";
 import type { GetUserShapes } from "../api/shapes/user/+server";
-import type { shapeNews } from "@/server/db/schema";
 
 export async function load({ fetch }) {
   const shapesResp = await fetch("/api/shapes");
@@ -21,6 +21,6 @@ export async function load({ fetch }) {
 
   const shapes: GetShapes = await shapesResp.json();
   const userShapes: GetUserShapes = await userShapesResp.json();
-  const news: typeof shapeNews.$inferSelect = await newsResp.json();
+  const news: (typeof shapeNews.$inferSelect)[] = await newsResp.json();
   return { shapes, userShapes, news };
 }
